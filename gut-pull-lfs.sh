@@ -1,8 +1,8 @@
 #!/bin/bash -xe
 
-for dir in ./*/
+for directory in ./*/
 do
-  cd ${dir}
+  cd ${directory}
   git lfs pull
   cd -
 done

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for dir in ./*/
+for directory in ./*/
 do
-  cd ${dir}
+  cd ${directory}
   # Place command here
   cd -
 done
