@@ -4,5 +4,5 @@ for dir in ./*/
 do
   cd ${dir}
   git lfs pull
-  cd ..
+  cd -
 done
