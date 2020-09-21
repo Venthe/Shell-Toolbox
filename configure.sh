@@ -2,9 +2,6 @@
 
 set -o xtrace
 
-# Root check
-if [[ $EUID -ne 0 ]]; then echo "Run this as the root user"; exit 1; fi
-
 apt update
 
 local _GENERATE_SSH_KEYS=false
@@ -21,14 +18,14 @@ local _USE_SNAP_WHEN_POSSIBLE=false
 local _INTELLIJ_IDEA=true
 local _SET_ENGLISH_LOCALE=true
 local _DOCKER=true
-local _BASHRC
+local _COPY_CONFIG=true
 
-if [ _BASHRC ]; then
-
+if [ _COPY_CONFIG ]; then
+  cp ./config/* ~
 fi
 
 if [ _GENERATE_SSH_KEYS ]; then
-  ssh-keygen -b 2048 \
+  sudo ssh-keygen -b 2048 \
              -t rsa \
              -C ${_GIT_EMAIL} \
              -f ~/.ssh/id_rsa
@@ -37,7 +34,7 @@ if [ _GENERATE_SSH_KEYS ]; then
 fi
 
 if [ _GIT ]; then
-  apt install --assume-yes git
+  sudo apt install --assume-yes git
   git config --global user.name "Jacek Lipiec"
   git config --global user.email ${_GIT_EMAIL}
   git config --global core.editor vim
@@ -50,65 +47,60 @@ if [ _GIT ]; then
   git config --global diff.algorithm histogram
   git config --global feature.manyFiles true
   git config --global init.defaultBranch main
-
-  cp ./config/.gitignore_global ~
-  cp ./config/.git-prompt.sh ~
-  cp ./config/.git-completion.sh ~
 fi
 
 if [ _VIM ]; then
-  apt install --assume-yes vim
+  sudo apt install --assume-yes vim
 fi
 
 if [ _DOS2UNIX ]; then
-  apt install --assume-yes dos2unix
+  sudo apt install --assume-yes dos2unix
 fi
 
 if [ _MAVEN ]; then
-  apt install --assume-yes maven
+  sudo apt install --assume-yes maven
 fi
 
 if [ _DOCKER ]; then
-  apt remove docker docker-engine docker.io containerd runc
-  apt install --assume-yes \
+  sudo apt remove docker docker-engine docker.io containerd runc
+  sudo apt install --assume-yes \
       apt-transport-https \
       ca-certificates \
       curl \
       gnupg-agent \
       software-properties-common
      
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  add-apt-repository \
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  sudo add-apt-repository \
      "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
      $(lsb_release -cs) \
      stable"
-  apt update
-  apt install --assume-yes docker-ce docker-ce-cli containerd.io docker-compose
-      
-  
-  systemctl enable docker
-  groupadd docker
-  usermod -aG docker ${USER}
-  newgrp docker
-  chown "$USER":"$USER" /home/"$USER"/.docker -R
-  chmod g+rwx "$HOME/.docker" -R
+  sudo apt update
+  sudo apt install --assume-yes docker-ce docker-ce-cli containerd.io docker-compose
+
+  sudo systemctl enable docker
+  sudo groupadd docker
+  sudo usermod -aG docker ${USER}
+  sudo newgrp docker
+  sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
+  sudo chmod g+rwx "$HOME/.docker" -R
 fi
 
 if [ _KUBECTL ]; then
   local _RELEASE_NAME="$(lsb_release -cs)"
-  apt install --assume-yes apt-transport-https gnupg2
-  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
-  apt update
-  apt install --assume-yes kubectl
+  sudo apt install --assume-yes apt-transport-https gnupg2
+  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+  sudo apt update
+  sudo apt install --assume-yes kubectl
 fi
 
 if [ _HELM ]; then
-  apt install --assume-yes apt-transport-https
-  curl https://helm.baltorepo.com/organization/signing.asc | apt-key add -
-  echo "deb https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
-  apt update
-  apt install --assume-yes helm
+  sudo apt install --assume-yes apt-transport-https
+  curl https://helm.baltorepo.com/organization/signing.asc | sudo apt-key add -
+  echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+  sudo apt update
+  sudo apt install --assume-yes helm
 fi
 
 if [ _VSCODE ]; then
@@ -118,25 +110,25 @@ if [ _VSCODE ]; then
     apt install --assume-yes apt-transport-https
 
     wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-    install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
-    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main"  | tee /etc/apt/sources.list.d/vscode.list
+    sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
     
-    apt update
-    apt install --assume-yes code # or code-insiders
+    sudo apt update
+    sudo apt install --assume-yes code # or code-insiders
   fi
 fi
 
 if [ _SSH_SERVER ]; then
-  apt install --assume-yes openssh-server
-  systemctl enable ssh
+  sudo apt install --assume-yes openssh-server
+  sudo systemctl enable ssh
 fi
 
 if [ _INTELLIJ_IDEA ]; then
-  snap install intellij-idea-ultimate --classic
+  sudo snap install intellij-idea-ultimate --classic
 fi
 
 if [ _SET_ENGLISH_LOCALE ]; then
-  update-locale LANG=en_US.UTF-8 LANGUAGE
-  locale-gen "en_US.UTF-8"
+  sudo update-locale LANG=en_US.UTF-8 LANGUAGE
+  sudo locale-gen "en_US.UTF-8"
   . /etc/default/locale
 fi
