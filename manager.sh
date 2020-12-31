@@ -1,71 +1,118 @@
-PASSPHRASE_FILE="passphrase.txt"
+#!/bin/env bash
+
 ROOT_SUBJECT_FILE="root_subject.txt"
 CSR_SUBJECT_FILE="csr_subject.txt"
-ENCRYPTION_BITS=4096
-OUTPUT_DIR=${OUTPUT_DIR:-./}
+ENCRYPTION_BITS=1024
+OUTPUT_DIR="${OUTPUT_DIR:-./}"
+
+function label() {
+    echo -e "  * ${@}"
+}
+
+function generate_passphrase() {
+    local passphrase_path="${OUTPUT_DIR}/${1}.passphrase"
+    label "Generating passphrase: ${passphrase_path}"
+    openssl rand -base64 14 | head -n 1 | tr -d '\n' > "${passphrase_path}"
+}
 
 function clean() {
-    rm $OUTPUT_DIR/*.pem $OUTPUT_DIR/*.key $OUTPUT_DIR/*.srl $OUTPUT_DIR/*.csr $OUTPUT_DIR/*.crt &2> /dev/null
+    label "Cleaning directory ${OUTPUT_DIR}"
+    local working_dir=$(pwd)
+    cd "${OUTPUT_DIR}"
+    rm "*.pem" \
+        "*.key" \
+        "*.srl" \
+        "*.ext" \
+        "*.csr" \
+        "*.crt" \
+        "*.passphrase" \
+        2> /dev/null || true
+    cd "${working_dir}"
 }
 
 function generate_key() {
-    local KEY_NAME=${1}
+    local key_file="${OUTPUT_DIR}/${1}.key"
+    local passphrase_file="${OUTPUT_DIR}/${1}.passphrase"
+    label "Generating key ${key_file} with passphrase ${passphrase_file}"
     openssl genrsa \
             -des3 \
-            -passout file:"${PASSPHRASE_FILE}" \
-            -out $OUTPUT_DIR/"${KEY_NAME}" \
+            -passout file:"${passphrase_file}" \
+            -out "${key_file}" \
             ${ENCRYPTION_BITS}
 }
 
-# certificate signing request
-function generate_csr() {
-    local KEY_NAME=$1
-    local CSR_NAME=$2
-    openssl req \
-            -new \
-            -key $OUTPUT_DIR/${KEY_NAME} \
-            -passin file:"${PASSPHRASE_FILE}" \
-            -subj "$(cat $CSR_SUBJECT_FILE)" \
-            -out $OUTPUT_DIR/${CSR_NAME}
+function decrypt_key() {
+    local key_file="${OUTPUT_DIR}/${1}.key"
+    local passphrase_file="${OUTPUT_DIR}/${1}.passphrase"
+    label "Decrypting key ${key_file} with passphrase ${passphrase_file}"
+    openssl rsa -in "${key_file}" --passin file:"${passphrase_file}"
 }
 
-function generate_pem() {
-    local KEY_NAME=${1}
-    local PEM_NAME=${2}
+function read_crt() {
+    local file="${OUTPUT_DIR}/${1}.crt"
+    openssl x509 -in "${file}" -text -noout
+}
+
+function generate_ca() {
+    local key_file="${OUTPUT_DIR}/${1}.key"
+    local output_file="${OUTPUT_DIR}/${1}.crt"
+    local passphrase_file="${OUTPUT_DIR}/${1}.passphrase"
+    shift 1
+    label "Generating CA ${output_file} with passphrase ${passphrase_file} and key ${key_file}"
     openssl req \
         -x509 \
         -new \
         -nodes \
-        -key $OUTPUT_DIR/"${KEY_NAME}" \
+        -key "${key_file}" \
         -sha512 \
-        -passin file:"${PASSPHRASE_FILE}" \
+        -passin file:"${passphrase_file}" \
         -days 1825 \
-        -subj "$(cat $ROOT_SUBJECT_FILE)" \
-        -out $OUTPUT_DIR/"${PEM_NAME}"
+        -out "${output_file}" \
+        "${@}"
 }
 
-function generate_certificate() {
-    local CSR=$1
-    local PEM=$2
-    local PEM_KEY=$3
-    local CRT_NAME=$4
-    local EXT_NAME=$5
+function generate_csr() {
+    local key_file="${OUTPUT_DIR}/${1}.key"
+    local csr_file="${OUTPUT_DIR}/${1}.csr"
+    local passphrase_file="${OUTPUT_DIR}/${1}.passphrase"
+    shift 1
+    label "Generating Certificate Signing Request ${csr_file} with passphrase ${passphrase_file} and key ${key_file}"
+    openssl req \
+            -new \
+            -key "${key_file}" \
+            -passin file:"${passphrase_file}" \
+            -out "${csr_file}" \
+            "${@}"
+}
+
+function generate_ext() {
+    local ext_file="${OUTPUT_DIR}/${1}.ext"
+    label "Generating EXT ${ext_file}"
+    printf "${2}" | cat > "${ext_file}"
+}
+
+function sign_csr() {
+    local signer_key="${OUTPUT_DIR}/${1}.key"
+    local signer_passphrase="${OUTPUT_DIR}/${1}.passphrase"
+    local signer_certificate="${OUTPUT_DIR}/${1}.crt"
+
+    local signee_csr="${OUTPUT_DIR}/${2}.csr"
+    local signee_ext="${OUTPUT_DIR}/${2}.ext"
+    local signee_certificate="${OUTPUT_DIR}/${2}.crt"
+    label "Signing intermediate certificate signee ${2} with signer ${1}"
+    shift 2
     openssl x509 \
         -req \
-        -in $OUTPUT_DIR/${CSR} \
-        -CA $OUTPUT_DIR/${PEM} \
-        -CAkey $OUTPUT_DIR/${PEM_KEY} \
+        -in "${signee_csr}" \
+        -CA "${signer_certificate}" \
+        -CAkey "${signer_key}" \
         -CAcreateserial \
-        -out $OUTPUT_DIR/${CRT_NAME} \
-        -passin file:"${PASSPHRASE_FILE}" \
+        -out "${signee_certificate}" \
+        -passin file:"${signer_passphrase}" \
         -days 825 \
         -sha512 \
-        -extfile ${EXT_NAME}
+        -extfile "${signee_ext}" \
+        "${@}"
 }
 
-function read_pem() {
-    local PEM_NAME=${2}
-    openssl x509 -in $OUTPUT_DIR/"${PEM_NAME}" -noout -text
-}
-
-$@
+"${@}"
