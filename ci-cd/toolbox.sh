@@ -19,6 +19,10 @@ function _git() {
         git rev-list HEAD --count "${@}"
     }
 
+    function blobs() {
+        git cat-file --batch-all-objects --batch-check "${@}"
+    }
+
     function all_commits() {
         git --no-pager log HEAD --pretty=format:"%H" --reverse "${@}" 
     }
