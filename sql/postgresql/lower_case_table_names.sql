@@ -1,5 +1,3 @@
-====== lower case table names ======
-<code sql>
 -- lower case table names -- the psql friendly and more reader-friendly way
 SELECT 'ALTER TABLE ' || quote_ident(t.table_schema) || '.'
   || quote_ident(t.table_name) || ' RENAME TO ' || quote_ident(lower(t.table_name)) || ';' As ddlsql
@@ -8,4 +6,3 @@ SELECT 'ALTER TABLE ' || quote_ident(t.table_schema) || '.'
       AND t.table_name <> lower(t.table_name) 
   ORDER BY t.table_schema, t.table_name;
 --generates something like this
-</code>
