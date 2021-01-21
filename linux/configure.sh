@@ -4,36 +4,38 @@ set -o xtrace
 
 apt update
 
-local _GENERATE_SSH_KEYS=false
-local _GIT=true
-local _GIT_EMAIL="jacek.lipiec.bc@gmail.com"
-local _VIM=true
-local _DOS2UNIX=true
-local _MAVEN=true
-local _KUBECTL=false
-local _HELM=false
-local _VSCODE=true
-local _SSH_SERVER=true
-local _USE_SNAP_WHEN_POSSIBLE=false
-local _INTELLIJ_IDEA=true
-local _SET_ENGLISH_LOCALE=true
-local _DOCKER=true
-local _COPY_CONFIG=true
+_GENERATE_SSH_KEYS=false
+_GIT=true
+_GIT_EMAIL="jacek.lipiec.bc@gmail.com"
+_VIM=true
+_DOS2UNIX=true
+_MAVEN=true
+_KUBECTL=false
+_HELM=false
+_VSCODE=true
+_SSH_SERVER=true
+_USE_SNAP_WHEN_POSSIBLE=false
+_INTELLIJ_IDEA=true
+_SET_ENGLISH_LOCALE=true
+_DOCKER=true
+_COPY_CONFIG=true
 
-if [ _COPY_CONFIG ]; then
+if [ $_COPY_CONFIG ]; then
   cp ./config/* ~
+  curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
+  curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
 fi
 
-if [ _GENERATE_SSH_KEYS ]; then
+if [ $_GENERATE_SSH_KEYS ]; then
   sudo ssh-keygen -b 2048 \
              -t rsa \
              -C ${_GIT_EMAIL} \
-             -f ~/.ssh/id_rsa
+             -f ~/.ssh/id_rsa \
              -q \
              -N ""
 fi
 
-if [ _GIT ]; then
+if [ $_GIT ]; then
   sudo apt install --assume-yes git
   git config --global user.name "Jacek Lipiec"
   git config --global user.email ${_GIT_EMAIL}
@@ -49,19 +51,19 @@ if [ _GIT ]; then
   git config --global init.defaultBranch main
 fi
 
-if [ _VIM ]; then
+if [ $_VIM ]; then
   sudo apt install --assume-yes vim
 fi
 
-if [ _DOS2UNIX ]; then
+if [ $_DOS2UNIX ]; then
   sudo apt install --assume-yes dos2unix
 fi
 
-if [ _MAVEN ]; then
+if [ $_MAVEN ]; then
   sudo apt install --assume-yes maven
 fi
 
-if [ _DOCKER ]; then
+if [ $_DOCKER ]; then
   sudo apt remove docker docker-engine docker.io containerd runc
   sudo apt install --assume-yes \
       apt-transport-https \
@@ -80,14 +82,13 @@ if [ _DOCKER ]; then
 
   sudo systemctl enable docker
   sudo groupadd docker
-  sudo usermod -aG docker ${USER}
+  sudo usermod -aG docker "${USER}"
   sudo newgrp docker
   sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
   sudo chmod g+rwx "$HOME/.docker" -R
 fi
 
-if [ _KUBECTL ]; then
-  local _RELEASE_NAME="$(lsb_release -cs)"
+if [ $_KUBECTL ]; then
   sudo apt install --assume-yes apt-transport-https gnupg2
   curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
   echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
@@ -95,7 +96,7 @@ if [ _KUBECTL ]; then
   sudo apt install --assume-yes kubectl
 fi
 
-if [ _HELM ]; then
+if [ $_HELM ]; then
   sudo apt install --assume-yes apt-transport-https
   curl https://helm.baltorepo.com/organization/signing.asc | sudo apt-key add -
   echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
@@ -103,8 +104,8 @@ if [ _HELM ]; then
   sudo apt install --assume-yes helm
 fi
 
-if [ _VSCODE ]; then
-  if [ _USE_SNAP_WHEN_POSSIBLE ]; then
+if [ $_VSCODE ]; then
+  if [ $_USE_SNAP_WHEN_POSSIBLE ]; then
     snap install --classic code # or code-insiders
   else
     apt install --assume-yes apt-transport-https
@@ -118,17 +119,18 @@ if [ _VSCODE ]; then
   fi
 fi
 
-if [ _SSH_SERVER ]; then
+if [ $_SSH_SERVER ]; then
   sudo apt install --assume-yes openssh-server
   sudo systemctl enable ssh
 fi
 
-if [ _INTELLIJ_IDEA ]; then
+if [ $_INTELLIJ_IDEA ]; then
   sudo snap install intellij-idea-ultimate --classic
 fi
 
-if [ _SET_ENGLISH_LOCALE ]; then
+if [ $_SET_ENGLISH_LOCALE ]; then
   sudo update-locale LANG=en_US.UTF-8 LANGUAGE
   sudo locale-gen "en_US.UTF-8"
+  # shellcheck disable=SC1091
   . /etc/default/locale
 fi

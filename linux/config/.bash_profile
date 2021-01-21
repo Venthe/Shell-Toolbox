@@ -6,8 +6,8 @@ if [ -f ~/.bashrc ]; then
     . ~/.bashrc
 fi
 
-source ~/.git-completion.bash
-source ~/.git-prompt.sh
+. ~/.git-completion.sh
+. ~/.git-prompt.sh
 
 GIT_PS1_SHOWDIRTYSTATE=1
 GIT_PS1_SHOWSTASHSTATE=1
