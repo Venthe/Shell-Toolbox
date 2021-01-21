@@ -2,7 +2,7 @@
 
 for directory in ./*/
 do
-  cd "${directory}"
+  cd "${directory}" || exit 1
   # Place command here
-  cd -
+  cd - || exit 1
 done
