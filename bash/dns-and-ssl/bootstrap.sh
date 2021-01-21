@@ -4,7 +4,7 @@ set -e
 
 DOMAIN="example.org"
 export OUTPUT_DIR=output
-CSR_SUBJECT="/C=PL/ST=Mazovia/L=Warsaw/O=Jacek Lipiec Business Consulting/CN=*.${DOMAIN}, emailAddress=jacek.lipiec.bc@gmail.com"
+CSR_SUBJECT="/C=PL/ST=Mazovia/L=Warsaw/O=Company Name/CN=*.${DOMAIN}, emailAddress=example@example.org"
 
 mkdir -p output
 ./manager.sh clean
