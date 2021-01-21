@@ -170,7 +170,7 @@ function checkstyle() {
 
     function last_commit() {
         FILES=$(_git files_to_verify | xargs)
-        _checkstyle $FILES "${@}"
+        _checkstyle "$FILES" "${@}"
     }
 
     function all() {
@@ -220,7 +220,7 @@ function churn() {
             exit
         fi
 
-        LOC=$(wc --lines ${FILENAME}| awk '{print $1}')
+        LOC=$(wc --lines "${FILENAME}" | awk '{print $1}')
 
         echo "$FILENAME;$TIMES_CHANGED;$LOC"
 
@@ -242,4 +242,4 @@ function churn() {
         #     --compact-output
 }
 
-(cd "${1}"; shift 1; "${@}")
+(cd "${1}" || exit 1; shift 1; "${@}")
