@@ -1,0 +1,8 @@
+alias kaf='cat <<EOF | kubectl apply -f -'
+alias efs='cat <<EOF | '
+alias g='git'
+alias grp='grep -rInP'
+alias mem='smem -r -k'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
