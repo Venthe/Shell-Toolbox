@@ -1,12 +1,10 @@
 #!/bin/env bash
 
-ROOT_SUBJECT_FILE="root_subject.txt"
-CSR_SUBJECT_FILE="csr_subject.txt"
 ENCRYPTION_BITS=1024
 OUTPUT_DIR="${OUTPUT_DIR:-./}"
 
 function label() {
-    echo -e "  * ${@}"
+    echo -e "  * $*"
 }
 
 function generate_passphrase() {
@@ -17,16 +15,17 @@ function generate_passphrase() {
 
 function clean() {
     label "Cleaning directory ${OUTPUT_DIR}"
-    local working_dir=$(pwd)
-    cd "${OUTPUT_DIR}"
-    rm *.pem 2> /dev/null || true
-    rm *.key 2> /dev/null || true
-    rm *.srl 2> /dev/null || true
-    rm *.ext 2> /dev/null || true
-    rm *.csr 2> /dev/null || true
-    rm *.crt 2> /dev/null || true
-    rm *.passphrase 2> /dev/null || true
-    cd "${working_dir}"
+    local working_dir
+    working_dir=$(pwd)
+    cd "${OUTPUT_DIR}" || exit 1
+    rm -- *.pem 2> /dev/null || true
+    rm -- *.key 2> /dev/null || true
+    rm -- *.srl 2> /dev/null || true
+    rm -- *.ext 2> /dev/null || true
+    rm -- *.csr 2> /dev/null || true
+    rm -- *.crt 2> /dev/null || true
+    rm -- *.passphrase 2> /dev/null || true
+    cd "${working_dir}" || exit 1
 }
 
 function generate_key() {
@@ -87,7 +86,7 @@ function generate_csr() {
 function generate_ext() {
     local ext_file="${OUTPUT_DIR}/${1}.ext"
     label "Generating EXT ${ext_file}"
-    printf "${2}" | cat > "${ext_file}"
+    printf "%s" "${2}" | cat > "${ext_file}"
 }
 
 function sign_csr() {
