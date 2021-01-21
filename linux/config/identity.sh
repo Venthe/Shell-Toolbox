@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 mkdir –p ~/.ssh
 chmod 0700 ~/.ssh
 ssh-keygen -t rsa -C "example@gmail.com"
