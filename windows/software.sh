@@ -8,27 +8,28 @@ rm -rf ./"${_TEMP_DIR}"
 mkdir "${_TEMP_DIR}"
 
 function download() {
-    local PREFIX=$2
-    local CUR_DIR=$(pwd)
-    local ORIGINAL_FILE_NAME=$(basename $1)
+    local PREFIX="${2}"
+    local CUR_DIR
+    CUR_DIR=$(pwd)
+    local ORIGINAL_FILE_NAME
+    ORIGINAL_FILE_NAME=$(basename "${1}")
     if [ -n "$2" ]; then
         local FINAL_FILE_NAME="$PREFIX$ORIGINAL_FILE_NAME"
     else
         local FINAL_FILE_NAME="$ORIGINAL_FILE_NAME"
     fi
     echo "downloading $FINAL_FILE_NAME"
-    cd "${_TEMP_DIR}"
+    cd "${_TEMP_DIR}" || exit 1
     curl "${1}" \
         --remote-name \
         --remote-header-name \
         --silent \
         --location \
         --show-error
-    FILE=/etc/resolv.conf
     if [[ ! -f "$FINAL_FILE_NAME" ]]; then
         mv "$ORIGINAL_FILE_NAME" "$FINAL_FILE_NAME"
     fi
-    cd "${CUR_DIR}"
+    cd "${CUR_DIR}" || exit 1
 }
 
 download "https://github.com/git-for-windows/git/releases/download/v2.27.0.windows.1/Git-2.27.0-64-bit.exe"
