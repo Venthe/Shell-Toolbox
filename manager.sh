@@ -19,14 +19,13 @@ function clean() {
     label "Cleaning directory ${OUTPUT_DIR}"
     local working_dir=$(pwd)
     cd "${OUTPUT_DIR}"
-    rm "*.pem" \
-        "*.key" \
-        "*.srl" \
-        "*.ext" \
-        "*.csr" \
-        "*.crt" \
-        "*.passphrase" \
-        2> /dev/null || true
+    rm *.pem 2> /dev/null || true
+    rm *.key 2> /dev/null || true
+    rm *.srl 2> /dev/null || true
+    rm *.ext 2> /dev/null || true
+    rm *.csr 2> /dev/null || true
+    rm *.crt 2> /dev/null || true
+    rm *.passphrase 2> /dev/null || true
     cd "${working_dir}"
 }
 
