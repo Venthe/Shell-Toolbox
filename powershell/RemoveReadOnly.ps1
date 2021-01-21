@@ -1,0 +1,1 @@
+gci -recurse | % {if($_.IsReadOnly){$_.IsReadOnly=$false}}
