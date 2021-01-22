@@ -156,30 +156,6 @@ function cpd() {
     "${@}"
 }
 
-function checkstyle() {
-    function _checkstyle() {
-        docker_run \
-            --volume="${PWD}:/checkstyle/workdir" \
-            venthe/checkstyle \
-            -f xml \
-            -c /checkstyle/rules/google_checks.xml \
-            "${@}" \
-            | xq  \
-            | jq_with_rev
-    }
-
-    function last_commit() {
-        FILES=$(_git files_to_verify | xargs)
-        _checkstyle "$FILES" "${@}"
-    }
-
-    function all() {
-        _checkstyle ./ "${@}"
-    }
-
-    "${@}"
-}
-
 function spotbugs() {
     docker_run --name spotbugs \
         --volume="${PWD}:/spotbugs/workdir" \
