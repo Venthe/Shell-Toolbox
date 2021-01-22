@@ -1,5 +1,5 @@
-<markdown>
 # Merging 2 Different Git Repositories Without Losing your History
+
 Today, I had to merge a git based project into another one. Nothing seems simpler, I just had to remove the .git directory, pick up the files, git commit -a -S -m “Merging old project into the new one” and we’re done.
 
 Except that I didn’t want to lose the first project history in the process. Keeping the full log is useful to understand why things were done in a way, or why they were done at all.
@@ -51,4 +51,3 @@ Well, because git documentation says you shouldn’t. [Quoting The Perils of Reb
 > When you rebase stuff, you’re abandoning existing commits and creating new ones that are similar but different. If you push commits somewhere and others pull them down and base work on them, and then you rewrite those commits with git rebase and push them up again, your collaborators will have to re-merge their work and things will get messy when you try to pull their work back into yours.
 
 That’s all folks, see you soon!
-</markdown>
