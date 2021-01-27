@@ -46,9 +46,26 @@ if [ $_GIT ]; then
   git config --global core.autocrlf true
   git config --global diff.renameLimit 65553
   git config --global diff.renames true
+  git config --global merge.conflictstyle diff3
   git config --global diff.algorithm histogram
   git config --global feature.manyFiles true
   git config --global init.defaultBranch main
+  git config --global alias.rebase-fixup git 'rebase --interactive --autosquash --no-edit'
+  git config --global alias.lol 'll -1 --stat'
+  git config --global alias.last 'log -1 --stat'
+  git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Creset %s %Cblue[%cn|%ad|%D]%Creset" --date="format:%Y-%m-%d" --decorate'
+  git config --global alias.raw-json-log "log --pretty=format:'{__SEPARATOR__commit__SEPARATOR__: __SEPARATOR__%H__SEPARATOR__,__SEPARATOR__abbreviated_commit__SEPARATOR__: __SEPARATOR__%h__SEPARATOR__,__SEPARATOR__tree__SEPARATOR__: __SEPARATOR__%T__SEPARATOR__,__SEPARATOR__abbreviated_tree__SEPARATOR__: __SEPARATOR__%t__SEPARATOR__,__SEPARATOR__parent__SEPARATOR__: __SEPARATOR__%P__SEPARATOR__,__SEPARATOR__abbreviated_parent__SEPARATOR__: __SEPARATOR__%p__SEPARATOR__,__SEPARATOR__refs__SEPARATOR__: __SEPARATOR__%D__SEPARATOR__,__SEPARATOR__encoding__SEPARATOR__: __SEPARATOR__%e__SEPARATOR__,__SEPARATOR__subject__SEPARATOR__: __SEPARATOR__%s__SEPARATOR__,__SEPARATOR__sanitized_subject_line__SEPARATOR__: __SEPARATOR__%f__SEPARATOR__,__SEPARATOR__body__SEPARATOR__: __SEPARATOR__%b__SEPARATOR__,__SEPARATOR__commit_notes__SEPARATOR__: __SEPARATOR__%N__SEPARATOR__,__SEPARATOR__verification_flag__SEPARATOR__: __SEPARATOR__%G?__SEPARATOR__,__SEPARATOR__signer__SEPARATOR__: __SEPARATOR__%GS__SEPARATOR__,__SEPARATOR__signer_key__SEPARATOR__: __SEPARATOR__%GK__SEPARATOR__,__SEPARATOR__author__SEPARATOR__: {  __SEPARATOR__name__SEPARATOR__: __SEPARATOR__%aN__SEPARATOR__, __SEPARATOR__email__SEPARATOR__: __SEPARATOR__%aE__SEPARATOR__, __SEPARATOR__date__SEPARATOR__: __SEPARATOR__%aD__SEPARATOR__},__SEPARATOR__commiter__SEPARATOR__: { __SEPARATOR__name__SEPARATOR__: __SEPARATOR__%cN__SEPARATOR__, __SEPARATOR__email__SEPARATOR__: __SEPARATOR__%cE__SEPARATOR__, __SEPARATOR__date__SEPARATOR__: __SEPARATOR__%cD__SEPARATOR__}}'"
+  git config --global alias.json-log '!_f() { git raw-json-log ${@} | sed ''s/\"/\\\"/g''| sed ''s/__SEPARATOR__/\"/g'' | jq --slurp --monochrome-output .; }; _f'
+  git config --global alias.unstage 'reset HEAD --'
+  git config --global alias.st 'status --short --branch'
+  git config --global alias.sdiff 'difftool --tool="vimdiff" -y'
+  git config --global alias.read-config 'config --global --list'
+  git config --global alias.search '!git rev-list --all | xargs git grep --fixed-strings'
+  git config --global alias.renormalize '!git add --renormalize . && git commit -m "Introduce end-of-line normalization"'
+  git config --global alias.purge '!git rm -r --force . && git clean -xd --force'
+  git config --global alias.b '!git for-each-ref --sort="-authordate" --format="%(authordate)%09%(objectname:short)%09%(refname)" refs/heads | sed -e "s-refs/heads/--"'
+  git config --global alias.ammend-this '!git add --all && git commit --amend --no-edit'
+  git config --global alias.ac '!git add -all && git commit --all --message'
 fi
 
 if [ $_VIM ]; then
