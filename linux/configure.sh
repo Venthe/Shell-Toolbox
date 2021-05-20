@@ -39,17 +39,18 @@ if [ $_GIT ]; then
   sudo apt install --assume-yes git
   git config --global user.name "Jacek Lipiec"
   git config --global user.email ${_GIT_EMAIL}
-  git config --global core.editor vim
-  git config --global core.pager less
-  git config --global help.autocorrect 5
   git config --global color.ui true
   git config --global core.autocrlf true
+  git config --global core.editor vim
+  git config --global core.pager less
+  git config --global diff.algorithm histogram
   git config --global diff.renameLimit 65553
   git config --global diff.renames true
-  git config --global merge.conflictstyle diff3
-  git config --global diff.algorithm histogram
   git config --global feature.manyFiles true
+  git config --global help.autocorrect 5
   git config --global init.defaultBranch main
+  git config --global merge.conflictstyle diff3
+  git config --global rebase.autosquash true
   git config --global alias.rebase-fixup git 'rebase --interactive --autosquash --no-edit'
   git config --global alias.lol 'll -1 --stat'
   git config --global alias.last 'log -1 --stat'
@@ -151,3 +152,22 @@ if [ $_SET_ENGLISH_LOCALE ]; then
   # shellcheck disable=SC1091
   . /etc/default/locale
 fi
+
+# Lazygit
+sudo add-apt-repository ppa:lazygit-team/release
+sudo apt-get update
+sudo apt-get install lazygit
+
+# MC
+sudo apt install mc
+
+# K9S
+curl --silent \
+     --location \
+     https://github.com/derailed/k9s/releases/download/v0.24.7/k9s_Linux_x86_64.tar.gz \
+  | tar --verbose \
+        --gzip \
+        --extract \
+        --overwrite \
+        --directory=~/.local/bin \
+        k9s

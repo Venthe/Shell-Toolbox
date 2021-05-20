@@ -1,0 +1,21 @@
+. ~/.git-prompt.sh
+
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWSTASHSTATE=1
+GIT_PS1_SHOWUNTRACKEDFILES=1
+GIT_PS1_SHOWCOLORHINTS=1
+GIT_PS1_DESCRIBE_STYLE=branch
+GIT_PS1_HIDE_IF_PWD_IGNORED=1
+GIT_PS1_SHOWUPSTREAM="verbose name"
+
+last_status() {
+  if [ $? -eq 0 ]; then
+    #echo -e "\e[32m${?}\e[0m"
+    echo -e
+  else
+    echo -e " \e[31m[Error code: ${?}]\e[0m"
+  fi
+}
+
+PS1="${PS1::-3}\$(__git_ps1 ' [%s]')\$(last_status) \$ "
+export PS1

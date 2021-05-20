@@ -6,3 +6,6 @@ alias mem='smem -r -k'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias basic_auth='ba(){ printf $1:$2 | base64; unset -f ba; }; ba'
+alias timestamp="printf \"$(date +%F%T%N | sed 's/[-:]//g')\""
+alias sanitize_directory_name="sed 's/^\///g ; s/[\/:]/_/g ; s/[\.]/-/g'"
