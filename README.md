@@ -1,7 +1,7 @@
 # Shell Toolbox
 
 1. Clone the Toolbox  
-   `git clone https://github.com/Venthe/Toolbox ~/.shell-toolbox`
+   `git clone https://github.com/Venthe/Shell-Toolbox ~/.shell-toolbox`
 2. Install ansible
    1. Linux
       ```bash

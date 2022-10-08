@@ -13,8 +13,12 @@ cat <<EOF > /tmp/wsl.conf
 enabled = true
 root = /mnt/
 options = "metadata,umask=22,fmask=11"
+
 [network]
 generateResolvConf = false
+
+[boot]
+systemd=true
 EOF
 sudo mv /tmp/wsl.conf /etc/wsl.conf
 
