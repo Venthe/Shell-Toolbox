@@ -17,6 +17,18 @@
    ```bash
    ansible-galaxy collection install community.crypto community.general
    ```
+4. Add sample inventory file
+   ```bash
+   cat <<EOF > inventory.yml
+   all:
+      hosts:
+         localhost:
+            git:
+               username: <Your username>
+               email: <Your mail>
+            ansible_host: localhost
+            ansible_connection: local
+   ```
 
 ## Development
 
