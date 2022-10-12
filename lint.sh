@@ -17,8 +17,10 @@ set -o pipefail
 function apply_on_file() {
     local command="${1}"
     local pattern="${2}"
+    local name="${3:lint}"
+    >&2 echo -e "\n* ${name}"
     find . -type f -iname "${pattern}" -print0 \
       | xargs -0 -n1 -I{} bash -c "${command}"
 }
 
-apply_on_file 'shellcheck -f gcc {}' '*.sh'
+apply_on_file 'shellcheck -f gcc {}' '*.sh' 'Shellcheck' || true
