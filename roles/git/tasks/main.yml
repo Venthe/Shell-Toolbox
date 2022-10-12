@@ -18,7 +18,7 @@
     - name: core.fsmonitor
       value: ""
     - name: rebase.updateRefs
-      value: true
+      value: 'true'
     - name: core.editor
       value: vim
     - name: user.name
@@ -30,23 +30,23 @@
     - name: help.autocorrect
       value: 5
     - name: color.ui
-      value: true
+      value: 'true'
     - name: core.autocrlf
-      value: true
+      value: 'true'
     - name: diff.renameLimit
       value: 65553
     - name: diff.renames
-      value: true
+      value: 'true'
     - name: merge.conflictstyle
       value: diff3
     - name: diff.algorithm
       value: histogram
     - name: feature.manyFiles
-      value: true
+      value: 'true'
     - name: init.defaultBranch
       value: main
     - name: rebase.autosquash
-      value: true
+      value: 'true'
     - name: alias.lol
       value: 'll -1 --stat'
     - name: alias.last
