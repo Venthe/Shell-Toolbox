@@ -13,5 +13,5 @@
       `N/A`
 3. Install ansible dependencies
    ```bash
-   ansible-galaxy collection install community.crypto
+   ansible-galaxy collection install community.crypto community.general
    ```
