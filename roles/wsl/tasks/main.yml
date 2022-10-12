@@ -46,12 +46,23 @@
     block: |
       [boot]
       systemd=true
+- name: Register host user directory
+  become: true
+  ansible.builtin.shell: wslpath "$(wslvar USERPROFILE)"
+  register: host_user_directory
+- name: Link .gitconfig
+  block:
+    - name: Remove old link
+      ansible.builtin.file:
+        path: "{{ ansible_facts.user_dir }}/.gitconfig"
+        state: absent
+    - name: Create symlink
+      ansible.builtin.file:
+        src: "{{ host_user_directory.stdout }}/.gitconfig"
+        dest: "{{ ansible_facts.user_dir }}/.gitconfig"
+        state: link
 - name: Configure SSH directory
   block:
-    - name: Register host user directory
-      become: true
-      ansible.builtin.shell: wslpath "$(wslvar USERPROFILE)"
-      register: host_user_directory
     - name: Create windows SSH if not exists
       ansible.builtin.file:
         path: "{{ host_user_directory.stdout }}/.ssh"
