@@ -72,7 +72,7 @@
     - name: alias.read-config
       value: 'config --global --list'
     - name: alias.rebase-fixup
-      value: git 'rebase --interactive --autosquash --no-edit'
+      value: 'rebase --interactive --autosquash --no-edit'
     - name: alias.json-log
       value: '!_f() { git raw-json-log ${@} | sed ''s/\"/\\\"/g''| sed ''s/__SEPARATOR__/\"/g'' | jq --slurp --monochrome-output .; }; _f'
     - name: alias.ammend-this
