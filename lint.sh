@@ -24,3 +24,4 @@ function apply_on_file() {
 }
 
 apply_on_file 'shellcheck -f gcc {}' '*.sh' 'Shellcheck' || true
+apply_on_file 'ansible-lint --parseable-severity --nocolor -p {}' '*.ansible.y*ml' 'Ansible lint' || true

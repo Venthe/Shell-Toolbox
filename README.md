@@ -23,4 +23,5 @@
 1. Install
    ```bash
    sudo apt install shellcheck --assume-yes
+   python3 -m pip install --user ansible==6.4.0 ansible-lint
    ```
