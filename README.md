@@ -6,7 +6,7 @@
    1. Linux
       ```bash
       sudo apt install python3 python3-pip --assume-yes
-      pip3 install ansible --user
+      python3 -m pip install --user ansible==6.4.0
       # echo 'PATH=$HOME/.local/bin:$PATH' >> ~/.bashrc
       ```
    2. Windows  
