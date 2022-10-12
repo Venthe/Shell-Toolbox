@@ -29,6 +29,7 @@
             ansible_host: localhost
             ansible_connection: local
    ```
+5. Run script: `bash ./run-setup.sh`
 
 ## Development
 
