@@ -37,6 +37,8 @@
       value: 65553
     - name: diff.renames
       value: 'true'
+    - name: pager.log
+      value: 'false'
     - name: merge.conflictstyle
       value: diff3
     - name: diff.algorithm
