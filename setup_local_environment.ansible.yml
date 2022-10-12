@@ -4,6 +4,7 @@
   gather_facts: true
   tasks: []
   roles:
+    - debug
     - wsl
     - ssh
     - git
