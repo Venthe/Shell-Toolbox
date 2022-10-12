@@ -89,3 +89,8 @@
         recurse: true
         mode: "u=rwx,g=,o="
         state: directory
+# - name: Reboot WSL
+#   ansible.builtin.reboot:
+#     reboot_command: cmd.exe /C 'wsl --shutdown & wsl echo'
+# ln --symbolic --directory /mnt/c/Users/User/.ssh ~
+

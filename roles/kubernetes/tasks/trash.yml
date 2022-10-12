@@ -1,0 +1,20 @@
+---
+- name: Create temporary downloads directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: downloads
+  register: downloads
+- name: Download
+  ansible.builtin.get_url:
+    url: https://dl.k8s.io/release/v1.25.0/bin/linux/amd64/kubectl
+    dest: "{{ downloads.path }}"
+    mode: 
+- command: "ls {{ downloads.path }}"
+  register: ls
+- debug:
+    msg: "{{ ls.stdout }}"
+- name: Use the registered var and the file module to remove the temporary file
+  ansible.builtin.file:
+    path: "{{ downloads.path }}"
+    state: absent
+  when: downloads.path is defined
