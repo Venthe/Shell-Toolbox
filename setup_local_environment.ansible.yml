@@ -5,6 +5,7 @@
   tasks: []
   roles:
     - debug
+    - common
     - wsl
     - ssh
     - git
