@@ -69,6 +69,8 @@
       value: '!git for-each-ref --sort="-authordate" --format="%(authordate)%09%(objectname:short)%09%(refname)" refs/heads | sed -e "s-refs/heads/--"'
     - name: alias.ac
       value: '!git add -all && git commit --all --message'
+    - name: alias.rebase-date
+      value: '!_f() { git rebase "${1}" --rebase-merges --committer-date-is-author-date; }; _f'
     - name: alias.read-config
       value: 'config --global --list'
     - name: alias.rebase-fixup
