@@ -4,3 +4,66 @@
     path: "{{ ansible_facts.user_dir }}/.hushlogin"
     state: touch
     mode: "u=rw,g=r,o="
+- name: Use WSL to resolve DNS
+  when: false
+  become: true
+  block:
+    - name: Disable resolv.conf generation
+      ansible.builtin.blockinfile:
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: RESOLV.CONF"
+        create: true
+        path: "/etc/wsl.conf"
+        mode: "u=rw,g=rw,o="
+        block: |
+          [network]
+          generateResolvConf = false
+    - name: Add google DNS
+      ansible.builtin.copy:
+        dest: "/etc/resolv.conf"
+        mode: "u=rw,g=rw,o="
+        content: |
+          [network]
+          nameserver 8.8.8.8
+- name: Enable automount; Enable wsl/linux fmask interop
+  become: true
+  ansible.builtin.blockinfile:
+    create: true
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: AUTOMOUNT"
+    path: "/etc/wsl.conf"
+    mode: "u=rw,g=rw,o="
+    block: |
+      [automount]
+      enabled = true
+      options = "metadata,umask=22,fmask=11"
+# https://devblogs.microsoft.com/commandline/a-preview-of-wsl-in-the-microsoft-store-is-now-available/#how-to-install-and-use-wsl-in-the-microsoft-store
+- name: Enable system.d
+  become: true
+  ansible.builtin.blockinfile:
+    create: true
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: SYSTEM.D"
+    path: "/etc/wsl.conf"
+    mode: "u=rw,g=rw,o="
+    block: |
+      [boot]
+      systemd=true
+- name: Configure SSH directory
+  block:
+    - name: Register host user directory
+      become: true
+      ansible.builtin.shell: wslpath "$(wslvar USERPROFILE)"
+      register: host_user_directory
+    - name: Create windows SSH if not exists
+      ansible.builtin.file:
+        path: "{{ host_user_directory.stdout }}/.ssh"
+        state: directory
+    - name: Link to windows directory
+      ansible.builtin.file:
+        src: "{{ host_user_directory.stdout }}/.ssh"
+        dest: "{{ ansible_facts.user_dir }}/.ssh"
+        state: link
+    - name: Set permissions
+      ansible.builtin.file:
+        path: "{{ ansible_facts.user_dir }}/.ssh"
+        recurse: true
+        mode: "u=rwx,g=,o="
+        state: directory
