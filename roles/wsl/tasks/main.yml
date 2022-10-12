@@ -4,6 +4,26 @@
     path: "{{ ansible_facts.user_dir }}/.hushlogin"
     state: touch
     mode: "u=rw,g=r,o="
+- name: Use WSL to resolve DNS
+  when: false
+  become: true
+  block:
+    - name: Disable resolv.conf generation
+      ansible.builtin.blockinfile:
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: RESOLV.CONF"
+        create: true
+        path: "/etc/wsl.conf"
+        mode: "u=rw,g=rw,o="
+        block: |
+          [network]
+          generateResolvConf = false
+    - name: Add google DNS
+      ansible.builtin.copy:
+        dest: "/etc/resolv.conf"
+        mode: "u=rw,g=rw,o="
+        content: |
+          [network]
+          nameserver 8.8.8.8
 - name: Enable automount; Enable wsl/linux fmask interop
   become: true
   ansible.builtin.blockinfile:
