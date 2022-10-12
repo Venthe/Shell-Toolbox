@@ -3,3 +3,5 @@
   hosts: all
   gather_facts: true
   tasks: []
+  roles:
+    - wsl
