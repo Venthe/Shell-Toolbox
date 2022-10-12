@@ -1,5 +1,7 @@
 # Shell Toolbox
 
+## Usage
+
 1. Clone the Toolbox  
    `git clone https://github.com/Venthe/Shell-Toolbox ~/.shell-toolbox`
 2. Install ansible
@@ -14,4 +16,11 @@
 3. Install ansible dependencies
    ```bash
    ansible-galaxy collection install community.crypto community.general
+   ```
+
+## Development
+
+1. Install
+   ```bash
+   sudo apt install shellcheck --assume-yes
    ```
