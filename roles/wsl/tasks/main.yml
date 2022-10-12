@@ -15,3 +15,14 @@
       [automount]
       enabled = true
       options = "metadata,umask=22,fmask=11"
+# https://devblogs.microsoft.com/commandline/a-preview-of-wsl-in-the-microsoft-store-is-now-available/#how-to-install-and-use-wsl-in-the-microsoft-store
+- name: Enable system.d
+  become: true
+  ansible.builtin.blockinfile:
+    create: true
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: SYSTEM.D"
+    path: "/etc/wsl.conf"
+    mode: "u=rw,g=rw,o="
+    block: |
+      [boot]
+      systemd=true
