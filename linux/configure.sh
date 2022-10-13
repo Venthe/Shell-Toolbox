@@ -10,7 +10,6 @@ _GIT_EMAIL="jacek.lipiec.bc@gmail.com"
 _VIM=true
 _DOS2UNIX=true
 _MAVEN=true
-_KUBECTL=false
 _HELM=false
 _VSCODE=true
 _SSH_SERVER=true
@@ -53,14 +52,6 @@ if [ $_DOCKER ]; then
   sudo newgrp docker
   sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
   sudo chmod g+rwx "$HOME/.docker" -R
-fi
-
-if [ $_KUBECTL ]; then
-  sudo apt install --assume-yes apt-transport-https gnupg2
-  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-  sudo apt update
-  sudo apt install --assume-yes kubectl
 fi
 
 if [ $_HELM ]; then

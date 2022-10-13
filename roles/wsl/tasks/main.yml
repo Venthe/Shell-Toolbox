@@ -50,6 +50,17 @@
   become: true
   ansible.builtin.shell: wslpath "$(wslvar USERPROFILE)"
   register: host_user_directory
+- name: Link .kube
+  block:
+    - name: Remove old link
+      ansible.builtin.file:
+        path: "{{ ansible_facts.user_dir }}/.kube"
+        state: absent
+    - name: Create symlink
+      ansible.builtin.file:
+        src: "{{ host_user_directory.stdout }}/.kube"
+        dest: "{{ ansible_facts.user_dir }}/.kube"
+        state: link
 - name: Link .gitconfig
   block:
     - name: Remove old link
