@@ -72,7 +72,7 @@
     - name: alias.ac
       value: '!git add -all && git commit --all --message'
     - name: alias.rebase-date
-      value: '!_f() { git rebase "${1}" --rebase-merges --committer-date-is-author-date; }; _f'
+      value: '!_f() { git rebase "${@}" --rebase-merges --committer-date-is-author-date; }; _f'
     - name: alias.read-config
       value: 'config --global --list'
     - name: alias.rebase-fixup
