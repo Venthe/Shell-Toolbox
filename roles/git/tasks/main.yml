@@ -32,7 +32,7 @@
     - name: color.ui
       value: 'true'
     - name: core.autocrlf
-      value: 'true'
+      value: 'false'
     - name: diff.renameLimit
       value: 65553
     - name: diff.renames
