@@ -1,0 +1,23 @@
+- name: Install common software
+  become: true
+  ansible.builtin.apt: 
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  with_items:
+    - vim
+- name: Set aliases
+  become: true
+  ansible.builtin.blockinfile:
+    create: true
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    path: "~/.vimrc"
+    mode: "u=rw,g=r,o="
+    block: |
+      # cnoremap: tells vim that the following shortcut is to be associated in the command line.
+      # w!!: the shortcut itself.
+      # execute '...': a command that execute the following string.
+      # silent!: run it silently
+      # write !sudo tee % >/dev/null: wirte with sudo, added a redirection of messages to NULL to make a clean command
+      # <bar> edit!: this trick is the cherry of the cake: it calls also the edit command to reload the buffer and then avoid messages such as the buffer has changed. <bar> is how to write the pipe symbol to separate two commands here.
+      cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
