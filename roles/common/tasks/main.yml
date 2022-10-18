@@ -1,7 +1,7 @@
 ---
 - name: Install common software
   become: true
-  ansible.builtin.apt: 
+  ansible.builtin.apt:
     name: "{{item}}"
     state: present
     update_cache: yes
@@ -9,9 +9,17 @@
     - dos2unix
     - mc
     - jq
+    - build-essential
 - name: Install nvm
   ansible.builtin.shell: >
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
   args:
-    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
-...
+    creates: "{{ ansible_facts.user_dir }}/.nvm/nvm.sh"
+- name: Install brew
+  ansible.builtin.shell: >
+    yes | bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+- ansible.builtin.script: |
+    echo '# Set PATH, MANPATH, etc., for Homebrew.' >> {{ ansible_facts.user_dir }}/.zprofile
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> {{ ansible_facts.user_dir }}/.zprofile
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    brew install gcc
