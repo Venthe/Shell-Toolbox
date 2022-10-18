@@ -8,6 +8,7 @@
   with_items:
     - zsh
     - fzf
+    - rsync
 - name: Install Pygments python package
   ansible.builtin.pip:
     name: Pygments
