@@ -23,3 +23,8 @@
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> {{ ansible_facts.user_dir }}/.zprofile
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     brew install gcc
+- ansible.builtin.shell: >
+    yes | bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+- community.general.homebrew:
+    name: k9s
+    state: present
