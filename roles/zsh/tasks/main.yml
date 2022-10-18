@@ -8,6 +8,9 @@
   with_items:
     - zsh
     - fzf
+- name: Install Pygments python package
+  ansible.builtin.pip:
+    name: Pygments
 - name: ""
   block:
     - name: delete
