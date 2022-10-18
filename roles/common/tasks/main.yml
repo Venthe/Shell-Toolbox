@@ -1,4 +1,24 @@
 ---
+# TODO: Add mvn
+# TODO: Add docker
+# TODO: Add universal plumber
+# TODO: Add minikube
+# TODO: Add tilt
+# TODO: Add vscode
+# TODO: Add ssh server
+# TODO: Add intellij idea
+# TODO: Add java version manager
+# TODO: Add yq
+# TODO: Add screenfetch
+# TODO: Add autojump
+# TODO: Add lazygit
+# TODO: Add fd
+# TODO: Add ripgrep
+# TODO: Add lazydocker
+# TODO: Add ctop
+# TODO: Add tldr
+# TODO: Add howdoi
+# TODO: Add icdiff
 - name: Install common software
   become: true
   ansible.builtin.apt:
