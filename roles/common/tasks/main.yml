@@ -32,11 +32,12 @@
     - dos2unix
     - mc
     - jq
-- name: Install nvm
-  ansible.builtin.shell: >
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+- ansible.builtin.shell: "{{item.cmd}}"
   args:
-    creates: "{{ ansible_facts.user_dir }}/.nvm/nvm.sh"
+    creates: "{{ item.creates }}"
+  with_items:
+    - cmd: VERSION=v0.39.3 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${VERSION}/install.sh | bash && nvm install --lts
+      creates: "{{ ansible_facts.user_dir }}/.nvm/nvm.sh"
 - ansible.builtin.script: |
     brew install gcc
 - community.general.homebrew:
