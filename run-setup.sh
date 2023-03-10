@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-ansible-playbook \
-    --inventory inventory.yaml \
+ANSIBLE_STDOUT_CALLBACK=yaml ansible-playbook \
+    --inventory inventory.yml \
     --ask-become \
     "${@}" \
     setup_local_environment.ansible.yml
