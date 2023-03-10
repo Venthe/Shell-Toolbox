@@ -38,6 +38,13 @@
   with_items:
     - cmd: VERSION=v0.39.3 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${VERSION}/install.sh | bash && nvm install --lts
       creates: "{{ ansible_facts.user_dir }}/.nvm/nvm.sh"
+    - cmd: |
+        VERSION=v3.11.2 wget --output-document {{ ansible_facts.user_dir }}/.local/bin/helm.tgz https://get.helm.sh/helm-${VERSION}-linux-amd64.tar.gz && \
+        tar -xf {{ ansible_facts.user_dir }}/.local/bin/helm.tgz -C {{ ansible_facts.user_dir }}/.local/bin linux-amd64/helm && \
+        mv {{ ansible_facts.user_dir }}/.local/bin/linux-amd64/helm {{ ansible_facts.user_dir }}/.local/bin/helm && \
+        rm -r {{ ansible_facts.user_dir }}/.local/bin/linux-amd64 && \
+        chmod +x {{ ansible_facts.user_dir }}/.local/bin/helm
+      creates: "{{ ansible_facts.user_dir }}/.local/bin/helm"
 - ansible.builtin.script: |
     brew install gcc
 - community.general.homebrew:
