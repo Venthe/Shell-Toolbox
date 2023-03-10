@@ -1,6 +1,6 @@
 ---
 - name: Provision Developer Workstation
-  hosts: all
+  hosts: [all]
   gather_facts: true
   tasks: []
   roles:
