@@ -1,17 +1,17 @@
 ---
-- name: Install ZSH
-  become: true
-  ansible.builtin.apt:
-    name: "{{item}}"
-    state: present
-    update_cache: yes
-  with_items:
-    - zsh
-    - fzf
-    - rsync
-- name: Install Pygments python package
-  ansible.builtin.pip:
-    name: Pygments
+- name: "Install dependencies"
+  block:
+    - become: true
+      ansible.builtin.apt:
+        name: "{{item}}"
+        state: present
+        update_cache: yes
+      with_items:
+        - zsh
+        - fzf
+        - rsync
+    - ansible.builtin.pip:
+        name: Pygments
 - block:
     - stat:
         path: "{{ ansible_facts.user_dir }}/.oh-my-zsh"
