@@ -46,6 +46,11 @@
     block: |
       [boot]
       systemd=true
+- become: true
+  ansible.builtin.apt:
+    name: wslu
+    state: present
+    update_cache: yes
 - name: Register host user directory
   become: true
   ansible.builtin.shell: wslpath "$(wslvar USERPROFILE)"
