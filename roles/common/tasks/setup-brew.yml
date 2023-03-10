@@ -1,0 +1,12 @@
+
+- become: true
+  ansible.builtin.apt:
+    name: build-essential
+    state: present
+    update_cache: yes
+- ansible.builtin.shell: >
+    yes | bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+- ansible.builtin.shell: |
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> {{ ansible_facts.user_dir }}/.zprofile
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> {{ ansible_facts.user_dir }}/.bashrc
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
