@@ -9,7 +9,6 @@
 # TODO: Add intellij idea
 # TODO: Add java version manager
 # TODO: Add yq
-# TODO: Add screenfetch
 # TODO: Add autojump
 # TODO: Add lazygit
 # TODO: Add fd
@@ -32,6 +31,7 @@
     - dos2unix
     - mc
     - jq
+    - screenfetch
 - ansible.builtin.shell: "{{item.cmd}}"
   args:
     creates: "{{ item.creates }}"
