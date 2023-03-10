@@ -32,6 +32,7 @@
     - ripgrep
     - fd-find
     - autojump
+    - curl
 - ansible.builtin.shell: "{{item.cmd}}"
   args:
     creates: "{{ item.creates }}"
