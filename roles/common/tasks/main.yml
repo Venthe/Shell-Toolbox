@@ -9,7 +9,6 @@
 # TODO: Add java version manager
 # TODO: Add tldr
 # TODO: Add howdoi
-# TODO: Add icdiff
 - name: Setup brew
   import_tasks: setup-brew.yml
 - name: Setup Kubernetes
@@ -58,3 +57,7 @@
     - jesseduffield/lazygit/lazygit
     - jesseduffield/lazydocker/lazydocker
     - ctop
+- ansible.builtin.pip:
+    name: "{{item}}"
+  with_items:
+    - icdiff
