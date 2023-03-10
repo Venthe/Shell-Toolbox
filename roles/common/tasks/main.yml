@@ -9,7 +9,6 @@
 # TODO: Add intellij idea
 # TODO: Add java version manager
 # TODO: Add yq
-# TODO: Add lazydocker
 # TODO: Add ctop
 # TODO: Add tldr
 # TODO: Add howdoi
@@ -52,3 +51,4 @@
     - k9s
     - gcc
     - jesseduffield/lazygit/lazygit
+    - jesseduffield/lazydocker/lazydocker
