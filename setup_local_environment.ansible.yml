@@ -10,6 +10,5 @@
       when: ansible_facts.env["WSL_DISTRO_NAME"] is defined
     - ssh
     - git
-    - kubernetes
     - vim
     - helm

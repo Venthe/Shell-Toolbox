@@ -19,6 +19,8 @@
 # TODO: Add tldr
 # TODO: Add howdoi
 # TODO: Add icdiff
+- name: Setup Kubernetes
+  import_tasks: setup-kubernetes.yml
 - name: Install common software
   become: true
   ansible.builtin.apt:
