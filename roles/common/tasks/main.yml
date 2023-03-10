@@ -8,7 +8,6 @@
 # TODO: Add ssh server
 # TODO: Add intellij idea
 # TODO: Add java version manager
-# TODO: Add yq
 # TODO: Add ctop
 # TODO: Add tldr
 # TODO: Add howdoi
@@ -35,6 +34,10 @@
   args:
     creates: "{{ item.creates }}"
   with_items:
+    - cmd: |
+        VERSION=v4.31.2 wget --output-document {{ ansible_facts.user_dir }}/.local/bin/yq https://github.com/mikefarah/yq/releases/download/${VERSION}/yq_linux_amd64 && \
+        chmod +x {{ ansible_facts.user_dir }}/.local/bin/yq
+      creates: "{{ ansible_facts.user_dir }}/.local/bin/yq"
     - cmd: VERSION=v0.39.3 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${VERSION}/install.sh | bash && nvm install --lts
       creates: "{{ ansible_facts.user_dir }}/.nvm/nvm.sh"
     - cmd: |
