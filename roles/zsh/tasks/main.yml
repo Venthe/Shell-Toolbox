@@ -12,10 +12,15 @@
 - name: Install Pygments python package
   ansible.builtin.pip:
     name: Pygments
-- name: ""
-  block:
-    - name: delete
-      ansible.builtin.file:
+- block:
+    - stat:
+        path: "{{ ansible_facts.user_dir }}/.oh-my-zsh"
+      register: oh_my_zsh_directory
+    - ansible.posix.synchronize:
+        src: "{{ ansible_facts.user_dir }}/.oh-my-zsh"
+        dest: "{{ ansible_facts.user_dir }}/.oh-my-zsh.{{ lookup('community.general.random_string') }}"
+      when: oh_my_zsh_directory.stat.exists
+    - file:
         path: "{{ ansible_facts.user_dir }}/.oh-my-zsh"
         state: absent
     - name: install ohmyzsh
@@ -31,11 +36,13 @@
     src: .zshrc
     dest: "{{ ansible_facts.user_dir }}/.zshrc"
     mode: "u=rw,g=r,o="
+    backup: yes
 - name: Configure Powerlevel10k
   ansible.builtin.copy:
     src: .p10k.zsh
     dest: "{{ ansible_facts.user_dir }}/.p10k.zsh"
     mode: "u=rw,g=r,o="
+    backup: yes
 - name: change user shell to zsh
   become: true
   user:
