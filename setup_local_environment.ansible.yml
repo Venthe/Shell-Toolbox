@@ -4,11 +4,11 @@
   gather_facts: true
   tasks: []
   roles:
-    # - common
-    # - wsl
-    # - ssh
+    - common
+    - wsl
+    - ssh
     - git
-    # - kubernetes
-    # - vim
-    # - zsh
-    # - helm
+    - kubernetes
+    - vim
+    - zsh
+    - helm
