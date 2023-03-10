@@ -45,8 +45,9 @@
         rm -r {{ ansible_facts.user_dir }}/.local/bin/linux-amd64 && \
         chmod +x {{ ansible_facts.user_dir }}/.local/bin/helm
       creates: "{{ ansible_facts.user_dir }}/.local/bin/helm"
-- ansible.builtin.script: |
-    brew install gcc
 - community.general.homebrew:
-    name: k9s
+    name: "{{item}}"
     state: present
+  with_items:
+    - k9s
+    - gcc
