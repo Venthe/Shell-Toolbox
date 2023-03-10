@@ -1,7 +1,6 @@
 ---
 # TODO: Add mvn
 # TODO: Add docker
-# TODO: Add universal plumber
 # TODO: Add minikube
 # TODO: Add tilt
 # TODO: Add vscode
@@ -47,6 +46,10 @@
         rm -r {{ ansible_facts.user_dir }}/.local/bin/linux-amd64 && \
         chmod +x {{ ansible_facts.user_dir }}/.local/bin/helm
       creates: "{{ ansible_facts.user_dir }}/.local/bin/helm"
+    - cmd: |
+        VERSION=v0.4 wget --output-document {{ ansible_facts.user_dir }}/.local/bin/up https://github.com/akavel/up/releases/download/${VERSION}/up && \
+        chmod +x {{ ansible_facts.user_dir }}/.local/bin/up
+      creates: "{{ ansible_facts.user_dir }}/.local/bin/up"
 - community.general.homebrew:
     name: "{{item}}"
     state: present
