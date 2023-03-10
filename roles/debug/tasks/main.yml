@@ -1,5 +1,0 @@
----
-- name: "Print facts"
-  when: false
-  ansible.builtin.debug:
-    var: ansible_facts
