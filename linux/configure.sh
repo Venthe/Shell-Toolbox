@@ -10,7 +10,6 @@ _GIT_EMAIL="jacek.lipiec.bc@gmail.com"
 _VIM=true
 _DOS2UNIX=true
 _MAVEN=true
-_HELM=false
 _VSCODE=true
 _SSH_SERVER=true
 _USE_SNAP_WHEN_POSSIBLE=false
