@@ -7,7 +7,6 @@
 # TODO: Add ssh server
 # TODO: Add intellij idea
 # TODO: Add java version manager
-# TODO: Add ctop
 # TODO: Add tldr
 # TODO: Add howdoi
 # TODO: Add icdiff
@@ -58,3 +57,4 @@
     - gcc
     - jesseduffield/lazygit/lazygit
     - jesseduffield/lazydocker/lazydocker
+    - ctop
