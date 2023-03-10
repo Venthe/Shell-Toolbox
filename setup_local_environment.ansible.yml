@@ -6,7 +6,8 @@
   roles:
     - zsh
     - common
-    - wsl
+    - role: roles/wsl
+      when: ansible_facts.env["WSL_DISTRO_NAME"] is defined
     - ssh
     - git
     - kubernetes
