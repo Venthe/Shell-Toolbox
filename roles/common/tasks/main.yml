@@ -7,7 +7,6 @@
 # TODO: Add ssh server
 # TODO: Add intellij idea
 # TODO: Add java version manager
-# TODO: Add tldr
 - name: Setup brew
   import_tasks: setup-brew.yml
 - name: Setup Kubernetes
@@ -61,3 +60,4 @@
   with_items:
     - icdiff
     - howdoi
+    - tldr
