@@ -11,7 +11,6 @@
 # TODO: Add yq
 # TODO: Add autojump
 # TODO: Add lazygit
-# TODO: Add fd
 # TODO: Add lazydocker
 # TODO: Add ctop
 # TODO: Add tldr
@@ -32,6 +31,7 @@
     - jq
     - screenfetch
     - ripgrep
+    - fd-find
 - ansible.builtin.shell: "{{item.cmd}}"
   args:
     creates: "{{ item.creates }}"
