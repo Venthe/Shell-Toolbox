@@ -1,24 +1,12 @@
 ---
 # TODO: Add mvn
 # TODO: Add docker
-# TODO: Add universal plumber
 # TODO: Add minikube
 # TODO: Add tilt
 # TODO: Add vscode
 # TODO: Add ssh server
 # TODO: Add intellij idea
 # TODO: Add java version manager
-# TODO: Add yq
-# TODO: Add screenfetch
-# TODO: Add autojump
-# TODO: Add lazygit
-# TODO: Add fd
-# TODO: Add ripgrep
-# TODO: Add lazydocker
-# TODO: Add ctop
-# TODO: Add tldr
-# TODO: Add howdoi
-# TODO: Add icdiff
 - name: Setup brew
   import_tasks: setup-brew.yml
 - name: Setup Kubernetes
@@ -32,10 +20,19 @@
     - dos2unix
     - mc
     - jq
+    - screenfetch
+    - ripgrep
+    - fd-find
+    - autojump
+    - curl
 - ansible.builtin.shell: "{{item.cmd}}"
   args:
     creates: "{{ item.creates }}"
   with_items:
+    - cmd: |
+        VERSION=v4.31.2 wget --output-document {{ ansible_facts.user_dir }}/.local/bin/yq https://github.com/mikefarah/yq/releases/download/${VERSION}/yq_linux_amd64 && \
+        chmod +x {{ ansible_facts.user_dir }}/.local/bin/yq
+      creates: "{{ ansible_facts.user_dir }}/.local/bin/yq"
     - cmd: VERSION=v0.39.3 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${VERSION}/install.sh | bash && nvm install --lts
       creates: "{{ ansible_facts.user_dir }}/.nvm/nvm.sh"
     - cmd: |
@@ -45,9 +42,22 @@
         rm -r {{ ansible_facts.user_dir }}/.local/bin/linux-amd64 && \
         chmod +x {{ ansible_facts.user_dir }}/.local/bin/helm
       creates: "{{ ansible_facts.user_dir }}/.local/bin/helm"
+    - cmd: |
+        VERSION=v0.4 wget --output-document {{ ansible_facts.user_dir }}/.local/bin/up https://github.com/akavel/up/releases/download/${VERSION}/up && \
+        chmod +x {{ ansible_facts.user_dir }}/.local/bin/up
+      creates: "{{ ansible_facts.user_dir }}/.local/bin/up"
 - community.general.homebrew:
     name: "{{item}}"
     state: present
   with_items:
     - k9s
     - gcc
+    - jesseduffield/lazygit/lazygit
+    - jesseduffield/lazydocker/lazydocker
+    - ctop
+- ansible.builtin.pip:
+    name: "{{item}}"
+  with_items:
+    - icdiff
+    - howdoi
+    - tldr
