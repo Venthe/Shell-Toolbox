@@ -23,8 +23,7 @@
   import_tasks: setup-brew.yml
 - name: Setup Kubernetes
   import_tasks: setup-kubernetes.yml
-- name: Install common software
-  become: true
+- become: true
   ansible.builtin.apt:
     name: "{{item}}"
     state: present
