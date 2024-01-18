@@ -83,6 +83,18 @@
       ansible.builtin.file:
         path: "{{ host_user_directory.stdout }}/.ssh"
         state: directory
+    - stat:
+        path: "{{ ansible_facts.user_dir }}/.ssh"
+      register: ssh_directory
+    - ansible.posix.synchronize:
+        src: "{{ ansible_facts.user_dir }}/.ssh"
+        dest: "{{ ansible_facts.user_dir }}/.ssh.{{ lookup('community.general.random_string', special=false) }}"
+      when: ssh_directory.stat.exists
+    - name: Recursively remove directory
+      ansible.builtin.file:
+        path: "{{ ansible_facts.user_dir }}/.ssh"
+        state: absent
+      when: ssh_directory.stat.exists
     - name: Link to windows directory
       ansible.builtin.file:
         src: "{{ host_user_directory.stdout }}/.ssh"

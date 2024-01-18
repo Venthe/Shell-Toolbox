@@ -18,7 +18,7 @@
       register: oh_my_zsh_directory
     - ansible.posix.synchronize:
         src: "{{ ansible_facts.user_dir }}/.oh-my-zsh"
-        dest: "{{ ansible_facts.user_dir }}/.oh-my-zsh.{{ lookup('community.general.random_string') }}"
+        dest: "{{ ansible_facts.user_dir }}/.oh-my-zsh.{{ lookup('community.general.random_string', special=false) }}"
       when: oh_my_zsh_directory.stat.exists
     - file:
         path: "{{ ansible_facts.user_dir }}/.oh-my-zsh"

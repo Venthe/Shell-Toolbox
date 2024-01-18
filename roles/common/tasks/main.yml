@@ -25,27 +25,23 @@
     - fd-find
     - autojump
     - curl
-- ansible.builtin.shell: "{{item.cmd}}"
-  args:
-    creates: "{{ item.creates }}"
+    - neofetch
+- name: Install from GitHub
+  ansible.builtin.get_url:
+    url: "https://github.com/{{ item.repository }}/releases/download/{{ item.binary }}"
+    dest: "{{ item.dest }}"
+    mode: "u=rwx,g=rwx,o=r"
   with_items:
-    - cmd: |
-        VERSION=v4.31.2 wget --output-document {{ ansible_facts.user_dir }}/.local/bin/yq https://github.com/mikefarah/yq/releases/download/${VERSION}/yq_linux_amd64 && \
-        chmod +x {{ ansible_facts.user_dir }}/.local/bin/yq
-      creates: "{{ ansible_facts.user_dir }}/.local/bin/yq"
-    - cmd: VERSION=v0.39.3 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${VERSION}/install.sh | bash && nvm install --lts
-      creates: "{{ ansible_facts.user_dir }}/.nvm/nvm.sh"
-    - cmd: |
-        VERSION=v3.11.2 wget --output-document {{ ansible_facts.user_dir }}/.local/bin/helm.tgz https://get.helm.sh/helm-${VERSION}-linux-amd64.tar.gz && \
-        tar -xf {{ ansible_facts.user_dir }}/.local/bin/helm.tgz -C {{ ansible_facts.user_dir }}/.local/bin linux-amd64/helm && \
-        mv {{ ansible_facts.user_dir }}/.local/bin/linux-amd64/helm {{ ansible_facts.user_dir }}/.local/bin/helm && \
-        rm -r {{ ansible_facts.user_dir }}/.local/bin/linux-amd64 && \
-        chmod +x {{ ansible_facts.user_dir }}/.local/bin/helm
-      creates: "{{ ansible_facts.user_dir }}/.local/bin/helm"
-    - cmd: |
-        VERSION=v0.4 wget --output-document {{ ansible_facts.user_dir }}/.local/bin/up https://github.com/akavel/up/releases/download/${VERSION}/up && \
-        chmod +x {{ ansible_facts.user_dir }}/.local/bin/up
-      creates: "{{ ansible_facts.user_dir }}/.local/bin/up"
+    - repository: mikefarah/yq
+      binary: "{{ vars.versions.yq }}/yq_linux_amd64"
+      dest: "{{ ansible_facts.user_dir }}/.local/bin/yq"
+    - repository: akavel/up
+      binary: "{{ vars.versions.up }}/up"
+      dest: "{{ ansible_facts.user_dir }}/.local/bin/up"
+- name: Setup NVM-sh
+  import_tasks: setup-nvm-sh.yml
+- name: Setup Helm
+  import_tasks: setup-helm.yml
 - community.general.homebrew:
     name: "{{item}}"
     state: present

@@ -1,0 +1,18 @@
+- name: Create temporary build directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: installation
+  register: installation
+- name: Download nvm-sh installer
+  become: true
+  ansible.builtin.get_url: 
+    url: https://raw.githubusercontent.com/nvm-sh/nvm/{{ vars.versions.nvmsh }}/install.sh
+    dest: "{{ installation.path }}/nvm-sh-install.sh"
+    mode: "u=rwx,g=rwx,o=rwx"
+- name: Execute the nvm-sh
+  shell: "{{ installation.path }}/nvm-sh-install.sh"
+- name: Use the registered var and the file module to remove the temporary file
+  ansible.builtin.file:
+    path: "{{ installation.path }}"
+    state: absent
+  when: installation.path is defined

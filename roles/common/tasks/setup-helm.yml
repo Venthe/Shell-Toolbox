@@ -6,16 +6,16 @@
     mode: '0755'
 - become: true
   ansible.builtin.get_url:
-    url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
-    dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
+    url: https://baltocdn.com/helm/signing.asc
+    dest: /usr/share/keyrings/helm.asc
     mode: "u=rwx,g=rwx,o=rx"
 - become: true
   ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
+    repo: "deb [arch={{ vars.deb_architecture[ansible_machine] }} signed-by=/usr/share/keyrings/helm.asc] https://baltocdn.com/helm/stable/debian/ all main"
     state: present
-    filename: kubernetes
+    filename: helm
 - become: true
   ansible.builtin.apt:
-    name: kubectl
+    name: helm
     state: present
     update_cache: yes
