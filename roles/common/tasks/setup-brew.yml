@@ -2,7 +2,7 @@
 - become: true
   ansible.builtin.apt:
     name: build-essential
-    state: present
+    state: latest
     update_cache: yes
 - ansible.builtin.shell: >
     yes | bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"

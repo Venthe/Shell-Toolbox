@@ -4,17 +4,20 @@
     path: /etc/apt/keyrings
     state: directory
     mode: '0755'
-- become: true
+- name: Add helm APT keys
+  become: true
   ansible.builtin.get_url:
     url: https://baltocdn.com/helm/signing.asc
     dest: /usr/share/keyrings/helm.asc
     mode: "u=rwx,g=rwx,o=rx"
-- become: true
+- name: Setup Helm deb repositroy
+  become: true
   ansible.builtin.apt_repository:
     repo: "deb [arch={{ vars.deb_architecture[ansible_machine] }} signed-by=/usr/share/keyrings/helm.asc] https://baltocdn.com/helm/stable/debian/ all main"
     state: present
     filename: helm
-- become: true
+- name: Install helm
+  become: true
   ansible.builtin.apt:
     name: helm
     state: present

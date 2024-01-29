@@ -11,8 +11,12 @@
     mode: "u=rwx,g=rwx,o=rwx"
 - name: Execute the nvm-sh
   shell: "{{ installation.path }}/nvm-sh-install.sh"
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
 - name: Use the registered var and the file module to remove the temporary file
   ansible.builtin.file:
     path: "{{ installation.path }}"
     state: absent
   when: installation.path is defined
+# - name: Install latest node
+#   shell: nvm install --lts

@@ -11,7 +11,7 @@
   become: true
   ansible.builtin.apt:
     name: git
-    state: present
+    state: latest
     update_cache: yes
 - name: Copy global gitignore
   ansible.builtin.copy:
@@ -24,6 +24,8 @@
     scope: global
     value: "{{ item.value }}"
   with_items:
+    - name: rerere.enabled
+      value: "true"
     - name: core.fsmonitor
       value: ""
     - name: rebase.updateRefs
@@ -46,12 +48,14 @@
       value: 65553
     - name: diff.renames
       value: "true"
+    - name: stash.showIncludeUntracked
+      value: "true"
     - name: core.fileMode
-      value: "false"
+      value: "true"
     - name: pager.log
       value: "false"
     - name: merge.conflictstyle
-      value: diff3
+      value: zdiff3
     - name: diff.algorithm
       value: histogram
     - name: feature.manyFiles
@@ -94,3 +98,6 @@
       value: "!git add --all && git commit --amend --no-edit"
     - name: alias.raw-json-log
       value: "log --pretty=format:'{__SEPARATOR__commit__SEPARATOR__: __SEPARATOR__%H__SEPARATOR__,__SEPARATOR__abbreviated_commit__SEPARATOR__: __SEPARATOR__%h__SEPARATOR__,__SEPARATOR__tree__SEPARATOR__: __SEPARATOR__%T__SEPARATOR__,__SEPARATOR__abbreviated_tree__SEPARATOR__: __SEPARATOR__%t__SEPARATOR__,__SEPARATOR__parent__SEPARATOR__: __SEPARATOR__%P__SEPARATOR__,__SEPARATOR__abbreviated_parent__SEPARATOR__: __SEPARATOR__%p__SEPARATOR__,__SEPARATOR__refs__SEPARATOR__: __SEPARATOR__%D__SEPARATOR__,__SEPARATOR__encoding__SEPARATOR__: __SEPARATOR__%e__SEPARATOR__,__SEPARATOR__subject__SEPARATOR__: __SEPARATOR__%s__SEPARATOR__,__SEPARATOR__sanitized_subject_line__SEPARATOR__: __SEPARATOR__%f__SEPARATOR__,__SEPARATOR__body__SEPARATOR__: __SEPARATOR__%b__SEPARATOR__,__SEPARATOR__commit_notes__SEPARATOR__: __SEPARATOR__%N__SEPARATOR__,__SEPARATOR__verification_flag__SEPARATOR__: __SEPARATOR__%G?__SEPARATOR__,__SEPARATOR__signer__SEPARATOR__: __SEPARATOR__%GS__SEPARATOR__,__SEPARATOR__signer_key__SEPARATOR__: __SEPARATOR__%GK__SEPARATOR__,__SEPARATOR__author__SEPARATOR__: {__SEPARATOR__name__SEPARATOR__: __SEPARATOR__%aN__SEPARATOR__, __SEPARATOR__email__SEPARATOR__: __SEPARATOR__%aE__SEPARATOR__, __SEPARATOR__date__SEPARATOR__: __SEPARATOR__%aD__SEPARATOR__},__SEPARATOR__commiter__SEPARATOR__: { __SEPARATOR__name__SEPARATOR__: __SEPARATOR__%cN__SEPARATOR__, __SEPARATOR__email__SEPARATOR__: __SEPARATOR__%cE__SEPARATOR__, __SEPARATOR__date__SEPARATOR__: __SEPARATOR__%cD__SEPARATOR__}}'"
+
+# sudo chmod +x /usr/share/doc/git/contrib/rerere-train.sh
+# ln -s /usr/share/doc/git/contrib/rerere-train.sh ~/.local/bin/rerere-train

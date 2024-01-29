@@ -49,7 +49,7 @@
 - become: true
   ansible.builtin.apt:
     name: wslu
-    state: present
+    state: latest
     update_cache: yes
 - name: Register host user directory
   become: true

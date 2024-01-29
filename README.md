@@ -15,7 +15,7 @@
       `N/A`
 3. Install ansible dependencies
    ```bash
-   ansible-galaxy collection install community.crypto community.general
+   ansible-galaxy collection install community.crypto community.general ovirt.ovirt
    ```
 4. Add sample inventory file
    ```bash

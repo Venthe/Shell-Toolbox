@@ -14,7 +14,7 @@
 - become: true
   ansible.builtin.apt:
     name: "{{item}}"
-    state: present
+    state: latest
     update_cache: yes
   with_items:
     - dos2unix
@@ -26,6 +26,8 @@
     - autojump
     - curl
     - neofetch
+    - tzdata
+# TODO: chmod +x
 - name: Install from GitHub
   ansible.builtin.get_url:
     url: "https://github.com/{{ item.repository }}/releases/download/{{ item.binary }}"
@@ -42,7 +44,8 @@
   import_tasks: setup-nvm-sh.yml
 - name: Setup Helm
   import_tasks: setup-helm.yml
-- community.general.homebrew:
+- name: Install with homebrew
+  community.general.homebrew:
     name: "{{item}}"
     state: present
   with_items:
@@ -51,9 +54,77 @@
     - jesseduffield/lazygit/lazygit
     - jesseduffield/lazydocker/lazydocker
     - ctop
-- ansible.builtin.pip:
+- name: Install with PIP
+  ansible.builtin.pip:
     name: "{{item}}"
   with_items:
     - icdiff
     - howdoi
     - tldr
+# TODO: JQ config
+# def map_keys(mapper):
+#   walk(
+#     if type == "object"
+#     then
+#       with_entries({
+#         key: (.key|mapper),
+# 	value
+#       })
+#     else .
+#     end
+#   );
+
+# def camel_to_snake:
+#   [
+#     splits("(?=[A-Z])")
+#   ]
+#   |map(
+#     select(. != "")
+#     | ascii_downcase
+#   )
+#   | join("_");
+
+# def snake_to_camel:
+#   split("_")
+#   | map(
+#     split("")
+#     | .[0] |= ascii_upcase
+#     | join("")
+#   )
+#   | join("");
+
+# def map_format:
+#   {
+#     "uri": "URI",
+#     "uri-template": "URITemplate",
+#     "boolean": "Boolean",
+#     "string": "String"
+#   } as $data |
+#   if (. | type) == "string" and $data[.] != null
+#   then $data[.]
+#   else .
+#   end;
+
+# def schema_to_pojo:
+#   .required as $required |
+#   .properties |
+#   to_entries[] |
+#   {
+#     key: .key,
+#     description:.value.description,
+#     type: (.value.format // .value.type // (if .value."$ref" != null then "ref:\(.value."$ref")" | "\"\(.)\"" else null end) // .value.oneOf // .value.anyOf // .value.allOf) | map_format,
+#     required: .key | IN($required[])
+#   } |
+#   (
+#     if .required==true
+#     then "\(.type)"
+#     else "Optional<\(.type)>"
+#     end
+#   ) as $mappedType |
+#   (
+#     if .description != null
+#     then "/** \(.description) */\n"
+#     else ""
+#     end
+#   ) as $description |
+#   "\($description)\($mappedType) get\(.key | snake_to_camel)();\n";

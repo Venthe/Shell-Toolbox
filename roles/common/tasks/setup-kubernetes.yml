@@ -17,5 +17,5 @@
 - become: true
   ansible.builtin.apt:
     name: kubectl
-    state: present
+    state: latest
     update_cache: yes
