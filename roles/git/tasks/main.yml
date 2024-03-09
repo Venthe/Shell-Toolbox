@@ -28,8 +28,12 @@
       value: "true"
     - name: core.fsmonitor
       value: ""
+    - name: receive.denyCurrentBranch
+      value: "warn"
     - name: rebase.updateRefs
       value: "true"
+    - name: url."git@github.com:".insteadOf
+      value: 'https://github.com/'
     - name: core.editor
       value: vim
     - name: user.name
@@ -37,7 +41,7 @@
     - name: user.email
       value: "{{ git.email }}"
     - name: core.pager
-      value: ""
+      value: "cat"
     - name: help.autocorrect
       value: 5
     - name: color.ui
@@ -52,6 +56,10 @@
       value: "true"
     - name: core.fileMode
       value: "true"
+    - name: push.autoSetupRemote
+      value: "true"
+    - name: pull.ff
+      value: "only"
     - name: pager.log
       value: "false"
     - name: merge.conflictstyle
