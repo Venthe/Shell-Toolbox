@@ -32,6 +32,8 @@
       value: "warn"
     - name: rebase.updateRefs
       value: "true"
+    - name: safe.directory
+      value: "*"
     - name: url."git@github.com:".insteadOf
       value: 'https://github.com/'
     - name: core.editor
